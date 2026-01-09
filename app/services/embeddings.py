@@ -33,13 +33,14 @@ We use sentence-transformers' all-MiniLM-L6-v2:
 - Good quality for most use cases
 """
 
+from typing import Optional
 from sentence_transformers import SentenceTransformer
 
 from app.config import settings
 
 # Global model instance (loaded once, reused)
 # This is a singleton pattern - avoids reloading the model for each request
-_model: SentenceTransformer | None = None
+_model: Optional[SentenceTransformer] = None
 
 
 def get_embedding_model() -> SentenceTransformer:

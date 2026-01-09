@@ -29,6 +29,7 @@ CHROMADB CONCEPTS
 """
 
 from dataclasses import dataclass
+from typing import Optional
 import chromadb
 from chromadb.config import Settings as ChromaSettings
 
@@ -37,7 +38,7 @@ from app.services.chunker import Chunk
 from app.services.embeddings import embed_texts, embed_query
 
 # Global ChromaDB client (singleton)
-_client: chromadb.HttpClient | None = None
+_client: Optional[chromadb.HttpClient] = None
 
 
 @dataclass
@@ -142,7 +143,7 @@ def add_chunks(chunks: list[Chunk]) -> int:
     return len(chunks)
 
 
-def search(query: str, top_k: int | None = None) -> list[SearchResult]:
+def search(query: str, top_k: Optional[int] = None) -> list[SearchResult]:
     """
     Search for chunks similar to the query.
 

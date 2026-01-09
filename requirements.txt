@@ -9,6 +9,7 @@ uvicorn[standard]>=0.27.0 # ASGI server to run FastAPI
 langchain>=0.1.0
 langchain-ollama>=0.1.0       # Ollama integration (local LLMs)
 langchain-community>=0.0.20   # Community integrations (ChromaDB, etc.)
+langchain-text-splitters>=0.0.1  # Text splitting utilities
 
 # Ollama client
 ollama>=0.2.0                 # Official Ollama Python client

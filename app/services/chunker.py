@@ -28,7 +28,7 @@ The overlap ensures we don't lose context at chunk boundaries.
 
 from dataclasses import dataclass
 
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from app.config import settings
 from app.services.document_loader import Document

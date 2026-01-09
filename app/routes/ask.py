@@ -10,6 +10,7 @@ POST /ask
 This is the main user-facing endpoint.
 """
 
+from typing import Optional
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
@@ -29,7 +30,7 @@ class AskRequest(BaseModel):
         max_length=1000,
         examples=["What is the return policy?"],
     )
-    top_k: int | None = Field(
+    top_k: Optional[int] = Field(
         default=None,
         description="Number of chunks to retrieve (uses config default if not specified)",
         ge=1,

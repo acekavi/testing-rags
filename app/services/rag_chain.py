@@ -32,6 +32,7 @@ Ollama runs LLMs locally on your machine:
 """
 
 from dataclasses import dataclass, asdict
+from typing import Optional
 import ollama
 
 from app.config import settings
@@ -158,7 +159,7 @@ def get_ollama_client() -> ollama.Client:
     return ollama.Client(host=settings.ollama_url)
 
 
-def ask(question: str, top_k: int | None = None) -> RAGResponse:
+def ask(question: str, top_k: Optional[int] = None) -> RAGResponse:
     """
     Run the full RAG pipeline to answer a question.
 

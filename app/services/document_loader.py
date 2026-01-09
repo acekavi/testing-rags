@@ -15,6 +15,7 @@ Each loaded document includes metadata:
 
 from pathlib import Path
 from dataclasses import dataclass
+from typing import Optional
 from pypdf import PdfReader
 
 from app.config import settings
@@ -90,7 +91,7 @@ def load_pdf_file(file_path: Path) -> list[Document]:
     return documents
 
 
-def load_documents(data_dir: str | None = None) -> list[Document]:
+def load_documents(data_dir: Optional[str] = None) -> list[Document]:
     """
     Load all documents from the data directory.
 
