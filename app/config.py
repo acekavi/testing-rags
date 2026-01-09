@@ -5,7 +5,7 @@ Pydantic Settings automatically:
 1. Loads values from environment variables
 2. Validates types (e.g., CHUNK_SIZE must be an int)
 3. Provides defaults when env vars are missing
-4. Raises clear errors for missing required values (like API keys)
+4. Raises clear errors for missing required values
 """
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -20,9 +20,11 @@ class Settings(BaseSettings):
         print(settings.chunk_size)  # 512
     """
 
-    # ----- LLM Configuration -----
-    anthropic_api_key: str  # Required - no default, will error if missing
-    llm_model_name: str = "claude-3-haiku-20240307"
+    # ----- Ollama Configuration -----
+    # Ollama runs locally - no API key needed!
+    ollama_host: str = "localhost"
+    ollama_port: int = 11434
+    llm_model_name: str = "mistral"  # Model to use for generation
 
     # ----- Embedding Configuration -----
     # This model runs locally on your machine
@@ -42,6 +44,11 @@ class Settings(BaseSettings):
 
     # ----- Data Configuration -----
     data_dir: str = "./data"
+
+    @property
+    def ollama_url(self) -> str:
+        """Full URL for Ollama API."""
+        return f"http://{self.ollama_host}:{self.ollama_port}"
 
     @property
     def chroma_url(self) -> str:

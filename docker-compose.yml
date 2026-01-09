@@ -15,6 +15,21 @@ services:
       - IS_PERSISTENT=TRUE
       - ANONYMIZED_TELEMETRY=FALSE
 
+  # Ollama - Local LLM Server
+  # Runs open-source LLMs locally on your machine
+  # No API keys needed, completely free, data stays local
+  ollama:
+    image: ollama/ollama:latest
+    container_name: rag-ollama
+    ports:
+      - "11434:11434"  # Ollama API port
+    volumes:
+      - ollama_data:/root/.ollama  # Persist downloaded models
+    # For CPU-only (no GPU), no special config needed
+    # The container will use CPU by default
+
 volumes:
   chroma_data:
+    driver: local
+  ollama_data:
     driver: local

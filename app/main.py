@@ -33,8 +33,9 @@ async def lifespan(app: FastAPI):
     """
     # Startup
     print("\n" + "=" * 50)
-    print("RAG Q&A API Starting Up")
+    print("RAG Q&A API Starting Up (100% Local)")
     print("=" * 50)
+    print(f"Ollama: {settings.ollama_url}")
     print(f"LLM Model: {settings.llm_model_name}")
     print(f"Embedding Model: {settings.embedding_model_name}")
     print(f"Chunk Size: {settings.chunk_size}")
@@ -57,6 +58,8 @@ app = FastAPI(
     title="RAG Q&A API",
     description="""
 A production-style RAG (Retrieval-Augmented Generation) API.
+
+**Runs 100% locally with Ollama - no API keys needed!**
 
 ## What is RAG?
 

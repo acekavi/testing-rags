@@ -21,10 +21,18 @@ CITATIONS
 We track which chunks were used to answer the question.
 This provides transparency - users can verify the answer
 by checking the source documents.
+
+OLLAMA
+======
+Ollama runs LLMs locally on your machine:
+- No API keys needed
+- Data stays private (never leaves your machine)
+- Free to use
+- Supports many models (Mistral, Llama, Phi, etc.)
 """
 
 from dataclasses import dataclass, asdict
-from anthropic import Anthropic
+import ollama
 
 from app.config import settings
 from app.services.vector_store import search, SearchResult
@@ -140,6 +148,16 @@ def create_snippet(content: str, max_length: int = 150) -> str:
     return truncated + "..."
 
 
+def get_ollama_client() -> ollama.Client:
+    """
+    Create Ollama client connected to the Docker container.
+
+    Returns:
+        Ollama client instance
+    """
+    return ollama.Client(host=settings.ollama_url)
+
+
 def ask(question: str, top_k: int | None = None) -> RAGResponse:
     """
     Run the full RAG pipeline to answer a question.
@@ -147,7 +165,7 @@ def ask(question: str, top_k: int | None = None) -> RAGResponse:
     This is the main entry point for the RAG system:
     1. Search for relevant chunks
     2. Build the prompt with context
-    3. Ask Claude to generate an answer
+    3. Ask Ollama to generate an answer
     4. Return answer with citations
 
     Args:
@@ -175,20 +193,19 @@ def ask(question: str, top_k: int | None = None) -> RAGResponse:
     context = format_context(search_results)
     prompt = RAG_PROMPT_TEMPLATE.format(context=context, question=question)
 
-    # Step 3: GENERATE - Ask Claude
-    print("Generating answer with Claude...")
-    client = Anthropic(api_key=settings.anthropic_api_key)
+    # Step 3: GENERATE - Ask Ollama (local LLM)
+    print(f"Generating answer with Ollama ({settings.llm_model_name})...")
+    client = get_ollama_client()
 
-    response = client.messages.create(
+    response = client.chat(
         model=settings.llm_model_name,
-        max_tokens=1024,
         messages=[
             {"role": "user", "content": prompt}
         ],
     )
 
     # Extract the answer text
-    answer = response.content[0].text
+    answer = response["message"]["content"]
 
     # Build citations from search results
     sources = [

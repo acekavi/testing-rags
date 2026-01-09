@@ -1,11 +1,11 @@
 # RAG Q&A API Project
 
 ## Project Overview
-Production-style RAG (Retrieval-Augmented Generation) Q&A API built with Python, FastAPI, and LangChain.
+Production-style RAG (Retrieval-Augmented Generation) Q&A API built with Python, FastAPI, and LangChain. **Runs 100% locally with Ollama - no API keys needed!**
 
 ## Tech Stack
 - **Framework**: FastAPI
-- **LLM**: Claude (Anthropic)
+- **LLM**: Ollama (local, free) - Mistral, Llama, Phi, etc.
 - **Vector DB**: ChromaDB (Docker)
 - **Embeddings**: Sentence Transformers (local, free)
 - **Language**: Python 3.11+
@@ -13,32 +13,34 @@ Production-style RAG (Retrieval-Augmented Generation) Q&A API built with Python,
 ## Quick Start
 
 ```bash
-# 1. Start ChromaDB (Docker)
+# 1. Start ChromaDB and Ollama containers
 docker compose up -d
 
-# 2. Create virtual environment
+# 2. Pull a model into Ollama (first time only, ~4GB for mistral)
+docker exec -it rag-ollama ollama pull mistral
+
+# 3. Create virtual environment
 python -m venv venv
 source venv/bin/activate  # Linux/Mac
 # or: venv\Scripts\activate  # Windows
 
-# 3. Install dependencies
+# 4. Install dependencies
 pip install -r requirements.txt
 
-# 4. Configure environment
+# 5. Create .env file (no API keys needed!)
 cp .env.example .env
-# Edit .env and add your ANTHROPIC_API_KEY
 
-# 5. Run the API (port 8080 to avoid conflict with ChromaDB)
+# 6. Run the API (port 8080 to avoid conflict with ChromaDB)
 uvicorn app.main:app --reload --port 8080
 
-# 6. Open API docs
+# 7. Open API docs
 # http://localhost:8080/docs
 ```
 
 ## Project Structure
 ```
 rag-excersice/
-├── docker-compose.yml      # ChromaDB container
+├── docker-compose.yml      # ChromaDB + Ollama containers
 ├── requirements.txt        # Python dependencies
 ├── .env.example           # Environment template
 ├── app/
@@ -81,14 +83,33 @@ Query the RAG system:
 ## Configuration (Environment Variables)
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `ANTHROPIC_API_KEY` | Your Anthropic API key | Required |
-| `LLM_MODEL_NAME` | Claude model | claude-3-haiku-20240307 |
+| `OLLAMA_HOST` | Ollama server host | localhost |
+| `OLLAMA_PORT` | Ollama server port | 11434 |
+| `LLM_MODEL_NAME` | Ollama model to use | mistral |
 | `EMBEDDING_MODEL_NAME` | Local embedding model | all-MiniLM-L6-v2 |
 | `CHUNK_SIZE` | Characters per chunk | 512 |
 | `CHUNK_OVERLAP` | Overlap between chunks | 50 |
 | `TOP_K` | Chunks to retrieve | 5 |
 | `CHROMA_HOST` | ChromaDB host | localhost |
 | `CHROMA_PORT` | ChromaDB port | 8000 |
+
+## Recommended Models for CPU (No GPU)
+
+| Model | Size | RAM | Speed | Quality |
+|-------|------|-----|-------|---------|
+| `gemma2:2b` | 2B | ~2GB | Fastest | Good |
+| `llama3.2` | 3B | ~2GB | Fast | Good |
+| `phi3` | 3.8B | ~3GB | Fast | Good |
+| `mistral` | 7B | ~4GB | Medium | Best |
+
+To switch models:
+```bash
+# Pull the model
+docker exec -it rag-ollama ollama pull llama3.2
+
+# Update .env
+LLM_MODEL_NAME=llama3.2
+```
 
 ## Testing the API
 
@@ -108,3 +129,4 @@ curl -X POST http://localhost:8080/ask \
 3. **Citations**: Returns citations matching retrieved chunks (no fake sources)
 4. **Error Handling**: Handles "no relevant docs" gracefully
 5. **Config via env vars**: All settings configurable
+6. **100% Local**: No API keys, no cloud dependencies, data stays private
