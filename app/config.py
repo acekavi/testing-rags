@@ -35,7 +35,12 @@ class Settings(BaseSettings):
     chunk_overlap: int = 50    # Overlap to preserve context
 
     # ----- Retrieval Configuration -----
-    top_k: int = 5  # Number of chunks to retrieve
+    top_k: int = 5  # Number of chunks to retrieve (final results)
+
+    # ----- Reranking Configuration -----
+    # Cross-encoder model for reranking (Option B)
+    reranker_model_name: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"
+    reranker_initial_k: int = 20  # Number of candidates to retrieve before reranking
 
     # ----- ChromaDB Configuration -----
     chroma_host: str = "localhost"

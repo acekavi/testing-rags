@@ -21,6 +21,11 @@ chromadb>=0.4.22          # Client to connect to ChromaDB server
 # Sentence Transformers runs locally (free, no API calls)
 sentence-transformers>=2.3.0
 
+# Reranking - Cross-encoder models for reranking search results
+# Used for Option B: retrieve top_k=20, rerank to final top_k=5
+# Uses cross-encoders that score query-document pairs directly
+# More accurate than bi-encoders but slower (only use on small candidate sets)
+
 # Document Processing
 pypdf>=4.0.0              # Extract text from PDFs
 python-multipart>=0.0.6   # Handle file uploads in FastAPI

@@ -20,7 +20,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
-from app.routes import ingest, ask
+from app.routes import ingest, ask, ask_reranked
 
 
 @asynccontextmanager
@@ -70,7 +70,8 @@ RAG combines document retrieval with LLM generation:
 ## Endpoints
 
 - **POST /ingest**: Process documents and build the vector index
-- **POST /ask**: Ask questions and get answers with sources
+- **POST /ask**: Ask questions and get answers with sources (baseline vector search)
+- **POST /ask-reranked**: Ask questions with cross-encoder reranking for improved accuracy
 
 ## Getting Started
 
@@ -95,6 +96,7 @@ app.add_middleware(
 # Include routers
 app.include_router(ingest.router, tags=["Ingestion"])
 app.include_router(ask.router, tags=["Q&A"])
+app.include_router(ask_reranked.router, tags=["Q&A - Advanced"])
 
 
 @app.get("/", tags=["Health"])
@@ -106,7 +108,8 @@ async def root():
         "docs": "/docs",
         "endpoints": {
             "ingest": "POST /ingest - Ingest documents from ./data/",
-            "ask": "POST /ask - Ask a question",
+            "ask": "POST /ask - Ask a question (baseline vector search)",
+            "ask_reranked": "POST /ask-reranked - Ask a question (with cross-encoder reranking)",
         },
     }
 
