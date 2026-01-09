@@ -5,83 +5,106 @@ Production-style RAG (Retrieval-Augmented Generation) Q&A API built with Python,
 
 ## Tech Stack
 - **Framework**: FastAPI
-- **LLM Orchestration**: LangChain
-- **Vector DB**: FAISS or Chroma (local)
-- **Embeddings**: OpenAI or local models
+- **LLM**: Claude (Anthropic)
+- **Vector DB**: ChromaDB (Docker)
+- **Embeddings**: Sentence Transformers (local, free)
 - **Language**: Python 3.11+
+
+## Quick Start
+
+```bash
+# 1. Start ChromaDB (Docker)
+docker compose up -d
+
+# 2. Create virtual environment
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+# or: venv\Scripts\activate  # Windows
+
+# 3. Install dependencies
+pip install -r requirements.txt
+
+# 4. Configure environment
+cp .env.example .env
+# Edit .env and add your ANTHROPIC_API_KEY
+
+# 5. Run the API (port 8080 to avoid conflict with ChromaDB)
+uvicorn app.main:app --reload --port 8080
+
+# 6. Open API docs
+# http://localhost:8080/docs
+```
 
 ## Project Structure
 ```
 rag-excersice/
+├── docker-compose.yml      # ChromaDB container
+├── requirements.txt        # Python dependencies
+├── .env.example           # Environment template
 ├── app/
-│   ├── __init__.py
-│   ├── main.py              # FastAPI app entry point
-│   ├── config.py            # Configuration via env vars
+│   ├── main.py            # FastAPI entry point
+│   ├── config.py          # Settings from env vars
 │   ├── routes/
-│   │   ├── __init__.py
-│   │   ├── ingest.py        # POST /ingest endpoint
-│   │   └── ask.py           # POST /ask endpoint
+│   │   ├── ingest.py      # POST /ingest
+│   │   └── ask.py         # POST /ask
 │   └── services/
-│       ├── __init__.py
-│       ├── document_loader.py   # Document loading (txt/pdf)
-│       ├── chunker.py           # Chunking with overlap + metadata
-│       ├── embeddings.py        # Embedding generation
-│       ├── vector_store.py      # Vector DB operations
-│       └── rag_chain.py         # RAG chain with citations
-├── data/                    # Document storage
-├── tests/
-├── requirements.txt
-├── .env.example
-└── README.md
+│       ├── document_loader.py  # Load txt/pdf files
+│       ├── chunker.py          # Split with overlap
+│       ├── embeddings.py       # Text → vectors
+│       ├── vector_store.py     # ChromaDB operations
+│       └── rag_chain.py        # RAG pipeline
+├── data/                  # Documents to ingest
+│   └── company_policies.txt   # Sample document
+└── tests/
 ```
 
 ## API Endpoints
 
 ### POST /ingest
-Builds the vector index from documents in `./data/`
+Processes documents from `./data/` and stores in ChromaDB.
 
 ### POST /ask
-Query the RAG system
-- Request: `{ "question": "...", "top_k": 5 }`
-- Response:
+Query the RAG system:
 ```json
+// Request
+{ "question": "What is the return policy?", "top_k": 5 }
+
+// Response
 {
-  "answer": "...",
+  "answer": "Products can be returned within 30 days...",
   "sources": [
-    {"doc": "a.txt", "chunk_id": 2, "score": 0.81, "snippet": "..."}
+    {"doc": "company_policies.txt", "chunk_id": 0, "score": 0.89, "snippet": "..."}
   ]
 }
 ```
 
 ## Configuration (Environment Variables)
-- `LLM_MODEL_NAME` - Model to use for generation
-- `EMBEDDING_MODEL_NAME` - Model for embeddings
-- `CHUNK_SIZE` - Size of document chunks (default: 512)
-- `CHUNK_OVERLAP` - Overlap between chunks (default: 50)
-- `TOP_K` - Default number of results to retrieve (default: 5)
-- `VECTOR_DB_TYPE` - "faiss" or "chroma"
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `ANTHROPIC_API_KEY` | Your Anthropic API key | Required |
+| `LLM_MODEL_NAME` | Claude model | claude-3-haiku-20240307 |
+| `EMBEDDING_MODEL_NAME` | Local embedding model | all-MiniLM-L6-v2 |
+| `CHUNK_SIZE` | Characters per chunk | 512 |
+| `CHUNK_OVERLAP` | Overlap between chunks | 50 |
+| `TOP_K` | Chunks to retrieve | 5 |
+| `CHROMA_HOST` | ChromaDB host | localhost |
+| `CHROMA_PORT` | ChromaDB port | 8000 |
 
-## Key Requirements
-1. **Chunking**: Deterministic chunking with overlap and metadata (doc_name, page, chunk_id)
-2. **RAG Chain**: Answer only from context; if not found say "I don't know"
-3. **Citations**: Return citations matching retrieved chunks (no fake sources)
-4. **Error Handling**: Handle "no relevant docs" gracefully
+## Testing the API
 
-## Development Commands
 ```bash
-# Install dependencies
-pip install -r requirements.txt
+# 1. Ingest documents
+curl -X POST http://localhost:8080/ingest
 
-# Run the API server
-uvicorn app.main:app --reload
-
-# Run tests
-pytest
+# 2. Ask a question
+curl -X POST http://localhost:8080/ask \
+  -H "Content-Type: application/json" \
+  -d '{"question": "What is the return policy?"}'
 ```
 
-## Quality Standards
-- Clean code structure with separation of concerns
-- Type hints throughout
-- Environment-based configuration
-- Proper error handling
-- No hallucinated citations
+## Key Requirements Met
+1. **Chunking**: Deterministic chunking with overlap and metadata (doc_name, page, chunk_id)
+2. **RAG Chain**: Answers only from context; says "I don't know" if not found
+3. **Citations**: Returns citations matching retrieved chunks (no fake sources)
+4. **Error Handling**: Handles "no relevant docs" gracefully
+5. **Config via env vars**: All settings configurable

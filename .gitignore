@@ -47,9 +47,10 @@ faiss_index/
 *.faiss
 *.pkl
 
-# Data files (keep structure, ignore content)
+# Data files
+# Keep sample files, ignore user-added documents
+!data/company_policies.txt
 data/*.pdf
-data/*.txt
 !data/.gitkeep
 
 # Logs
