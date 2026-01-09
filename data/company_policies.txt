@@ -1,0 +1,41 @@
+ACME Corporation - Company Policies and Procedures
+===================================================
+
+RETURN POLICY
+-------------
+All products purchased from ACME Corporation may be returned within 30 days of purchase for a full refund. Items must be in their original packaging and in unused condition. To initiate a return, customers should contact our customer service department at returns@acme.com or call 1-800-ACME-RET.
+
+For defective products, ACME offers a 90-day warranty period during which products can be exchanged or refunded regardless of packaging condition. Proof of purchase is required for all returns and exchanges.
+
+SHIPPING INFORMATION
+--------------------
+Standard shipping takes 5-7 business days for domestic orders. Express shipping is available for an additional fee and delivers within 2-3 business days. International shipping times vary by destination, typically ranging from 10-21 business days.
+
+Free shipping is offered on all orders over $50 within the continental United States. Alaska and Hawaii orders incur an additional $15 shipping fee regardless of order value.
+
+CUSTOMER LOYALTY PROGRAM
+------------------------
+ACME Rewards members earn 1 point for every dollar spent. Points can be redeemed at a rate of 100 points = $5 discount. Gold members (those who spend over $500 annually) earn 1.5 points per dollar and receive free express shipping on all orders.
+
+To join ACME Rewards, customers can sign up at checkout or create an account on our website. Membership is free and points never expire as long as the account remains active with at least one purchase per year.
+
+PRIVACY POLICY
+--------------
+ACME Corporation is committed to protecting customer privacy. We collect only the information necessary to process orders and improve our services. Customer data is never sold to third parties.
+
+Customers can request deletion of their personal data at any time by contacting privacy@acme.com. We comply with GDPR and CCPA regulations for data protection.
+
+EMPLOYMENT BENEFITS
+-------------------
+Full-time ACME employees receive comprehensive benefits including:
+- Health insurance (medical, dental, and vision)
+- 401(k) matching up to 4% of salary
+- 15 days paid time off in the first year, increasing to 20 days after 3 years
+- Flexible work arrangements including remote work options
+- Professional development stipend of $1,500 annually
+
+TECHNICAL SUPPORT
+-----------------
+Technical support is available Monday through Friday, 8 AM to 8 PM Eastern Time. Weekend support is available for premium customers only. Contact support@acme.com or call 1-800-ACME-HELP.
+
+For software products, ACME provides free updates for one year from purchase date. Extended support plans are available for purchase. Hardware products include a standard one-year warranty with optional extended warranty plans.

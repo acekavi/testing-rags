@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  # ChromaDB - Vector Database
+  # This stores our document embeddings and enables semantic search
+  # "Semantic search" means finding documents by meaning, not just keywords
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: rag-chromadb
+    ports:
+      - "8000:8000"  # ChromaDB API port
+    volumes:
+      - chroma_data:/chroma/chroma  # Persist data between restarts
+    environment:
+      - IS_PERSISTENT=TRUE
+      - ANONYMIZED_TELEMETRY=FALSE
+
+volumes:
+  chroma_data:
+    driver: local

@@ -1,0 +1,29 @@
+# Web Framework
+fastapi>=0.109.0          # Modern async web framework with auto-docs
+uvicorn[standard]>=0.27.0 # ASGI server to run FastAPI
+
+# LangChain - LLM Orchestration Framework
+# LangChain simplifies building LLM applications by providing:
+# - Document loaders, text splitters, embeddings
+# - Chains that connect retrieval → prompts → LLMs
+langchain>=0.1.0
+langchain-anthropic>=0.1.0    # Claude integration
+langchain-community>=0.0.20   # Community integrations (ChromaDB, etc.)
+
+# Vector Database
+chromadb>=0.4.22          # Client to connect to ChromaDB server
+
+# Embeddings - Convert text to vectors
+# Sentence Transformers runs locally (free, no API calls)
+sentence-transformers>=2.3.0
+
+# Document Processing
+pypdf>=4.0.0              # Extract text from PDFs
+python-multipart>=0.0.6   # Handle file uploads in FastAPI
+
+# Configuration
+python-dotenv>=1.0.0      # Load .env files
+pydantic-settings>=2.1.0  # Settings management with validation
+
+# HTTP Client (for ChromaDB connection)
+httpx>=0.26.0
